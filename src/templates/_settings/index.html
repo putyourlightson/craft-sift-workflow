@@ -1,0 +1,38 @@
+{% extends '_layouts/cp' %}
+
+{% set title = 'Sift Workflow' %}
+{% set categories = craft.categories.groupId(settings.categoryGroupId).all() %}
+
+
+{% block content %}
+    <div id="nocategories"{% if categories|length %}class="hidden"{% endif %}>
+        <p>No categories exist.</p>
+    </div>
+
+    {% if categories|length %}
+        <table id="categories" class="data fullwidth collapsible">
+            <thead>
+                <th>Title</th>
+                <th>Custom Review User Groups</th>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                    <th><a href="{{ cpUrl('settings/plugins/sift-workflow/' ~ category.id) }}">{{ category.title }}</a></th>
+                    <td>
+                        {% if settings.categoryReviewUserGroups[category.id] is defined %}
+                            <span class="icon" data-icon="check"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+
+{% js %}
+new Craft.AdminTable({
+    tableSelector: '#categories',
+});
+{% endjs %}

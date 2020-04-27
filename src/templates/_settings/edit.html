@@ -1,0 +1,65 @@
+{% extends '_layouts/cp' %}
+
+{% import '_includes/forms' as forms %}
+
+{% set crumbs = [
+    { label: 'Sift Workflow', url: url('settings/plugins/sift-workflow') }
+] %}
+
+{% set title = category.title %}
+
+{% set groups = [] %}
+{% for group in craft.app.userGroups.getAllGroups() %}
+    {% set groups = groups | merge([{ label: group.name, value: group.uid }]) %}
+{% endfor %}
+
+
+{% block actionButton %}
+
+    <input type="submit" class="btn submit" value="Save">
+    <a class="btn formsubmit" data-action="sift-workflow/settings/delete-category">Delete</a>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <input type='hidden' name='action' value='sift-workflow/settings/save-category' />
+    <input type='hidden' name='categoryId' value='{{ category.id }}' />
+
+    {{ redirectInput('settings/plugins/sift-workflow') }}
+
+    {% set cols = [
+        {
+            type: 'select',
+            heading: 'User Group' | t('workflow'),
+            options: groups,
+        },
+    ] %}
+
+    {{ forms.editableTableField({
+        label: 'Reviewer User Groups' | t('workflow'),
+        instructions: 'Select the user groups that your reviewers belong to. Reviewers are users that can review and edit submissions and pass them along for approval, but not publish live. The review process flows from the first to the last user group in the table.' | t('workflow'),
+        name: 'categoryReviewUserGroups',
+        id: 'categoryReviewUserGroups',
+        cols: cols,
+        rows: categoryReviewUserGroups,
+        addRowLabel: 'Add a user group' | t('workflow'),
+        first: true,
+    })|spaceless }}
+
+{% endblock %}
+
+
+{% css %}
+table.editable tbody tr td {
+    text-align: left;
+}
+table.editable tbody tr td:first-of-type:before {
+    font-family: 'Craft';
+    content: 'rarr';
+    color: #9aa5b1;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+{% endcss %}
