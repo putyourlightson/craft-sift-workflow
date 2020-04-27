@@ -8,9 +8,11 @@ namespace putyourlightson\siftworkflow;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterUrlRulesEvent;
+use craft\models\UserGroup;
 use craft\web\Controller;
 use craft\web\UrlManager;
 use putyourlightson\siftworkflow\models\SettingsModel;
+use verbb\workflow\elements\Submission;
 use verbb\workflow\events\ReviewerUserGroupsEvent;
 use verbb\workflow\services\Submissions;
 use yii\base\Event;
@@ -46,7 +48,7 @@ class SiftWorkflow extends Plugin
 
         Event::on(Submissions::class, Submissions::EVENT_AFTER_GET_REVIEWER_USER_GROUPS,
             function (ReviewerUserGroupsEvent $event) {
-                $event->userGroups = [];
+                $event->userGroups = $this->_getReviewerUserGroups($event->submission);
             }
         );
     }
@@ -70,5 +72,43 @@ class SiftWorkflow extends Plugin
     protected function createSettingsModel(): SettingsModel
     {
         return new SettingsModel();
+    }
+
+    /**
+     * Returns reviewer user groups for the provided submission or `null` if none found.
+     * @param Submission|null $submission
+     * @return UserGroup[]|null
+     */
+    private function _getReviewerUserGroups(Submission $submission = null)
+    {
+        if ($submission === null) {
+            return null;
+        }
+
+        $entry = $submission->getOwner();
+
+        if ($entry === null) {
+            return null;
+        }
+
+        $category = $entry->userCategories->one();
+
+        if ($category === null) {
+            return null;
+        }
+
+        $categoryReviewerUserGroups = $this->settings->categoryReviewUserGroups[$category->id] ?? null;
+
+        if ($categoryReviewerUserGroups === null) {
+            return null;
+        }
+
+        $userGroups = [];
+
+        foreach ($categoryReviewerUserGroups as $categoryReviewerUserGroup) {
+            $userGroups[] = Craft::$app->getUserGroups()->getGroupByUid($categoryReviewerUserGroup[0]);
+        }
+
+        return $userGroups;
     }
 }
