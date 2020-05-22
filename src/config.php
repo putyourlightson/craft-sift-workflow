@@ -9,7 +9,7 @@
  * This file exists only as a template for the Sift plugin settings.
  * It does nothing on its own.
  *
- * Don't edit this file, instead copy it to 'craft/config' as 'sift.php'
+ * Don't edit this file, instead copy it to 'craft/config' as 'sift-workflow.php'
  * and make your changes there to override default settings.
  *
  * Once copied to 'craft/config', this file will be multi-environment aware as
@@ -22,6 +22,11 @@ return [
         /**
          * The category group ID to use for custom review processes
          */
-        'categoryGroupId' => 1000,
+        'categoryGroupId' => 1,
+
+        /**
+         * The categories field handle to sift by
+         */
+        'categoriesFieldHandle' => 'userCategories',
     ],
 ];

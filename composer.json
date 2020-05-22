@@ -1,7 +1,7 @@
 {
     "name": "putyourlightson/craft-sift-workflow",
     "description": "Adds custom review processes to the Workflow plugin for specific categories.",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "type": "craft-plugin",
     "license": "mit",
     "require": {

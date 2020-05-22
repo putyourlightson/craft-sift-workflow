@@ -15,6 +15,11 @@ class SettingsModel extends Model
     public $categoryGroupId;
 
     /**
+     * @var string|null
+     */
+    public $categoriesFieldHandle;
+
+    /**
      * @var array
      */
     public $categoryReviewUserGroups = [];

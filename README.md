@@ -23,7 +23,12 @@ return [
         /**
          * The category group ID to use for custom review processes
          */
-        'categoryGroupId' => 1000,
+        'categoryGroupId' => 1,
+
+        /**
+         * The categories field handle to sift by
+         */
+        'categoriesFieldHandle' => 'userCategories',
     ],
 ];
 ```

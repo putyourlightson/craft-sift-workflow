@@ -76,6 +76,7 @@ class SiftWorkflow extends Plugin
 
     /**
      * Returns reviewer user groups for the provided submission or `null` if none found.
+     *
      * @param Submission|null $submission
      * @return UserGroup[]|null
      */
@@ -91,7 +92,8 @@ class SiftWorkflow extends Plugin
             return null;
         }
 
-        $category = $entry->userCategories->one();
+        $categoriesFieldHandle = $this->settings->categoriesFieldHandle;
+        $category = $entry->{$categoriesFieldHandle}->one();
 
         if ($category === null) {
             return null;
